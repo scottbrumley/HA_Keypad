@@ -86,15 +86,46 @@ class MainWindow(QMainWindow, mainwindow_auto.Ui_MainWindow):
         print ("received payload: " + str(current_state.decode("utf-8") ))
 
         if current_state.decode("utf-8")  == 'pending':
+            self.status_label.setStyleSheet('color: yellow')
             self.setStatus("Pending")
+            #self.status_label.setStyleSheet('color: yellow')
+
         if current_state.decode("utf-8")  == 'armed_away':
+            self.button1.setStyleSheet('color: white;background-color: red')
+            self.status_label.setStyleSheet('color: red')
             self.setStatus("Armed Away")
+            #self.status_label.setStyleSheet('color: red')
+            #self.button1.setStyleSheet('background-color: red')
+            #self.button1.setStyleSheet('color: red')
+        else:
+            self.button1.setStyleSheet('color: black;background-color: white')
+
         if current_state.decode("utf-8")  == 'armed_home':
+            self.button2.setStyleSheet('color: white;background-color: red')
+            self.status_label.setStyleSheet('color: red')
             self.setStatus("Armed Home")
+            #self.status_label.setStyleSheet('color: red')
+            #self.button2.setStyleSheet('background-color: red')
+            #self.button2.setStyleSheet('color: red')
+        else:
+            self.button2.setStyleSheet('color: black;background-color: white')
+
         if current_state.decode("utf-8")  == 'triggered':
+            self.status_label.setStyleSheet('color: yellow')
             self.setStatus("Triggered")
+            #self.status_label.setStyleSheet('color: yellow')
+
         if current_state.decode("utf-8")  == 'disarmed':
+            self.button3.setStyleSheet('color: white;background-color: green')
+            self.status_label.setStyleSheet('color: white;background-color: green')
             self.setStatus("Disarmed")
+        else:
+            self.button3.setStyleSheet('color: black;background-color: white')
+            #self.status_label.setStyleSheet('color: white')
+            #self.status_label.setStyleSheet('background-color: green')
+
+            #self.button3.setStyleSheet('background-color: green')
+            #self.button3.setStyleSheet('color: green')
 
         # HA will send `pending` or `triggered` when the state is about to change
         # In these cases, we can't be 100% sure what the next state will be
