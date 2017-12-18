@@ -233,7 +233,7 @@ class Ui_MainWindow(object):
         self.button1.setText(_translate("MainWindow", "Armed Away"))
         self.button2.setText(_translate("MainWindow", "Armed Home"))
         self.label_status_lbl.setText(_translate("MainWindow", "<html><head/><body><p align=\"right\"><span style=\" font-size:18pt;\">Status:    </span></p></body></html>"))
-        self.status_label.setText(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
+        self.status_label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.button3.setText(_translate("MainWindow", "Disarm"))
         self.noOneButton.setText(_translate("MainWindow", "1"))
         self.noTwoButton.setText(_translate("MainWindow", "2"))
