@@ -28,6 +28,7 @@ STATE_3 = 6
 STATE_4_GOOD = 7
 STATE_4_BAD = 8
 
+PINS = os.environ.get('PINS').split(',')
 MQTT_HOST = os.environ.get('MQTT_HOST')
 MQTT_PORT = int(os.environ.get('MQTT_PORT', 1883))
 MQTT_USER = os.environ.get('MQTT_USER')
@@ -41,12 +42,30 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 class MainWindow(QMainWindow, mainwindow_auto.Ui_MainWindow):
     ### functions for the buttons to call
     def pressedOnButton(self):
-        print ("Armed Away!")
-        client.publish(MQTT_COMMAND_TOPIC, payload='ARM_AWAY', qos=2, retain=True)
+        if self.key_label.text() in PINS:
+            print ("Armed Away!")
+            client.publish(MQTT_COMMAND_TOPIC, payload='ARM_AWAY', qos=2, retain=True)
 
     def pressedOffButton(self):
-        print ("Armed Home")
-        client.publish(MQTT_COMMAND_TOPIC, payload='ARM_HOME', qos=2, retain=True)
+        if self.key_label.text() in PINS:
+            print ("Armed Home")
+            client.publish(MQTT_COMMAND_TOPIC, payload='ARM_HOME', qos=2, retain=True)
+
+    def pressedDisarmButton(self):
+        if self.key_label.text() in PINS:
+            print ("Disarmed")
+            client.publish(MQTT_COMMAND_TOPIC, payload='DISARM', qos=2, retain=True)
+
+    def pressedKeyPadButton(self, valueStr):
+        print ("Key Pressed: " + valueStr)
+        currentVal = self.key_label.text()
+
+        if valueStr == "#" or valueStr == "*":
+            currentVal = ""
+        else:
+            currentVal = currentVal + valueStr
+
+        self.key_label.setText(currentVal)
 
     def setStatus(self,valueStr):
         self.status_label.setText(valueStr)
@@ -56,7 +75,6 @@ class MainWindow(QMainWindow, mainwindow_auto.Ui_MainWindow):
         current_state = message.payload
 
         print ("received payload: " + str(current_state.decode("utf-8") ))
-
 
         if current_state.decode("utf-8")  == 'pending':
             self.setStatus("Pending")
@@ -93,6 +111,20 @@ class MainWindow(QMainWindow, mainwindow_auto.Ui_MainWindow):
         ### Hooks to for buttons
         self.button1.clicked.connect(lambda: self.pressedOnButton())
         self.button2.clicked.connect(lambda: self.pressedOffButton())
+        self.button3.clicked.connect(lambda: self.pressedDisarmButton())
+        self.noZeroButton.clicked.connect(lambda: self.pressedKeyPadButton("0"))
+        self.noOneButton.clicked.connect(lambda: self.pressedKeyPadButton("1"))
+        self.noTwoButton.clicked.connect(lambda: self.pressedKeyPadButton("2"))
+        self.noThreeButton.clicked.connect(lambda: self.pressedKeyPadButton("3"))
+        self.noFourButton.clicked.connect(lambda: self.pressedKeyPadButton("4"))
+        self.noFiveButton.clicked.connect(lambda: self.pressedKeyPadButton("5"))
+        self.noSixButton.clicked.connect(lambda: self.pressedKeyPadButton("6"))
+        self.noSevenButton.clicked.connect(lambda: self.pressedKeyPadButton("7"))
+        self.noEightButton.clicked.connect(lambda: self.pressedKeyPadButton("8"))
+        self.noNineButton.clicked.connect(lambda: self.pressedKeyPadButton("9"))
+        self.noPoundButton.clicked.connect(lambda: self.pressedKeyPadButton("#"))
+        self.noAstButton.clicked.connect(lambda: self.pressedKeyPadButton("*"))
+        self.key_label.setText("")
         self.status_label.setText("")
 
     def on_connect(self,client, userdata, flags, rc):
