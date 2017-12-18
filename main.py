@@ -45,16 +45,25 @@ class MainWindow(QMainWindow, mainwindow_auto.Ui_MainWindow):
         if self.key_label.text() in PINS:
             print ("Armed Away!")
             client.publish(MQTT_COMMAND_TOPIC, payload='ARM_AWAY', qos=2, retain=True)
+            self.key_label.setText("")
+        else:
+            self.setStatus("Invalid Pin")
 
     def pressedOffButton(self):
         if self.key_label.text() in PINS:
             print ("Armed Home")
             client.publish(MQTT_COMMAND_TOPIC, payload='ARM_HOME', qos=2, retain=True)
+            self.key_label.setText("")
+        else:
+            self.setStatus("Invalid Pin")
 
     def pressedDisarmButton(self):
         if self.key_label.text() in PINS:
             print ("Disarmed")
             client.publish(MQTT_COMMAND_TOPIC, payload='DISARM', qos=2, retain=True)
+            self.key_label.setText("")
+        else:
+            self.setStatus("Invalid Pin")
 
     def pressedKeyPadButton(self, valueStr):
         print ("Key Pressed: " + valueStr)
